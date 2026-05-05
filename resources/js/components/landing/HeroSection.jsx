@@ -6,22 +6,43 @@ import { getContent } from '../../lib/content';
 import HeroArt from './HeroArt';
 import SearchCard from './SearchCard';
 
-const titleLines = [
-    { text: 'Life is short' },
-    { text: 'and the world', emoji: '🌍' },
-    { text: 'is Wide!', emoji: '🏝️' },
-];
+function splitHeroTitle(title) {
+    const cleanTitle = title?.trim();
+
+    if (!cleanTitle) {
+        return ['Life is short', 'and the world 🌍', 'is Wide! 🏝️'];
+    }
+
+    const normalized = cleanTitle
+        .replace('🌴', '🏝️')
+        .replace(/\s+/g, ' ');
+
+    const match = normalized.match(/^(.*?)\s+(and\s+the\s+world)\s+(is\s+wide!?)(.*)$/i);
+
+    if (match) {
+        const [, firstLine, secondLine, thirdLine, trailingEmoji] = match;
+
+        return [
+            firstLine,
+            `${secondLine} 🌍`,
+            `${thirdLine.replace(/wide/i, 'Wide')}${trailingEmoji.trim() ? ` ${trailingEmoji.trim()}` : ' 🏝️'}`,
+        ];
+    }
+
+    return normalized.split(/\s*\|\s*|\n+/).filter(Boolean);
+}
 
 export default function HeroSection() {
+    const titleLines = splitHeroTitle(getContent('hero_title'));
+
     return (
         <div className="grid items-center gap-10 pt-12 sm:pt-14 lg:grid-cols-[560px_1fr] lg:gap-4 lg:pt-16">
             <motion.div className="hero-copy relative z-20" initial="hidden" animate="show" variants={staggerChildren()}>
                 <motion.p className="hero-eyebrow" variants={fadeUp}>{getContent('eyebrow')}</motion.p>
                 <motion.h1 className="hero-title" variants={fadeUp} aria-label={getContent('hero_title')}>
                     {titleLines.map((line) => (
-                        <span className="hero-title-line" key={line.text}>
-                            {line.text}
-                            {line.emoji ? <span className="hero-title-emoji" aria-hidden="true">{line.emoji}</span> : null}
+                        <span className="hero-title-line" key={line}>
+                            {line}
                         </span>
                     ))}
                 </motion.h1>
