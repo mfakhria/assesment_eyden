@@ -10,7 +10,7 @@ class PageContentSeeder extends Seeder
     public function run(): void
     {
         $contents = [
-            ['brand_name', 'text', 'Travel'],
+            ['brand_name', 'text', 'Assestment Eyden M Fakhri A'],
             ['nav_home', 'text', 'Home'],
             ['nav_tours', 'text', 'Our Tours'],
             ['nav_reviews', 'text', 'Reviews'],

@@ -18,7 +18,7 @@ class CmsContentTest extends TestCase
         $response = $this->get(route('cms.edit'));
 
         $response->assertOk();
-        $response->assertSee('Travel Landing Content');
+        $response->assertSee('Assestment Eyden M Fakhri A');
         $response->assertSee('Hero');
         $response->assertSee('Values Section');
     }
