@@ -119,8 +119,16 @@
             </div>
         </section>
 
+        @if ($databaseOffline ?? false)
+            <div class="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold leading-6 text-amber-800">Database belum terkoneksi. CMS tetap bisa dilihat memakai fallback content, tapi perubahan belum bisa disimpan. Jalankan <code>docker compose up -d</code>, lalu <code>php artisan migrate --seed</code>.</div>
+        @endif
+
         @if (session('status'))
             <p class="mb-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold text-emerald-700">{{ session('status') }}</p>
+        @endif
+
+        @if (session('error'))
+            <p class="mb-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-bold text-amber-800">{{ session('error') }}</p>
         @endif
 
         @if ($errors->any())
