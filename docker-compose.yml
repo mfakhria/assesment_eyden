@@ -1,0 +1,37 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: travel_laravel_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: travel_laravel
+      MYSQL_USER: travel_user
+      MYSQL_PASSWORD: travel_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: travel_laravel_phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: travel_user
+      PMA_PASSWORD: travel_password
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql_data:
